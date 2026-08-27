@@ -3,11 +3,17 @@ import AppShell from './layouts/AppShell';
 import Dashboard from './pages/Dashboard';
 import Landing from './pages/Landing';
 import Placeholder from './pages/Placeholder';
+import Login from './auth/Login';
+import Register from './auth/Register';
+import ForgotPassword from './auth/ForgotPassword';
 
 export default function App() {
   return (
     <Routes>
       <Route path="/" element={<Landing />} />
+      <Route path="/login" element={<Login />} />
+      <Route path="/register" element={<Register />} />
+      <Route path="/forgot-password" element={<ForgotPassword />} />
       <Route element={<AppShell />}>
         <Route path="/dashboard" element={<Dashboard />} />
         <Route path="/discover" element={<Placeholder title="Discover" description="Find travellers who match your destination, dates, budget and interests." />} />
