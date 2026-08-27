@@ -1,5 +1,6 @@
 import { useMemo, useState } from 'react';
 import { Camera, Check, MapPin, Save, UserRound } from 'lucide-react';
+import './profile.css';
 
 const travelStyles = ['Budget', 'Balanced', 'Comfort', 'Luxury'];
 const interests = ['Adventure', 'Beaches', 'Culture', 'Food', 'Hiking', 'Photography', 'Nightlife', 'Nature', 'Road trips', 'Shopping'];
