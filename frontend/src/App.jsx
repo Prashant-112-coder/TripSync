@@ -1,4 +1,5 @@
 import { Routes, Route, Navigate } from 'react-router-dom';
+import './auth/auth.css';
 import AppShell from './layouts/AppShell';
 import Dashboard from './pages/Dashboard';
 import Landing from './pages/Landing';
