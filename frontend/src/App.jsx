@@ -7,6 +7,7 @@ import Placeholder from './pages/Placeholder';
 import Login from './auth/Login';
 import Register from './auth/Register';
 import ForgotPassword from './auth/ForgotPassword';
+import Profile from './pages/profile/Profile';
 
 export default function App() {
   return (
@@ -29,7 +30,7 @@ export default function App() {
         <Route path="/notifications" element={<Placeholder title="Notifications" description="Stay up to date with matches, requests and trip activity." />} />
         <Route path="/safety" element={<Placeholder title="Safety Center" description="Verification, reporting, emergency contacts and safety tools." />} />
         <Route path="/settings" element={<Placeholder title="Settings" description="Manage your account and TripSync preferences." />} />
-        <Route path="/profile" element={<Placeholder title="Profile" description="Your traveller identity, interests and travel preferences." />} />
+        <Route path="/profile" element={<Profile />} />
       </Route>
       <Route path="*" element={<Navigate to="/dashboard" replace />} />
     </Routes>
