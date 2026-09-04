@@ -8,6 +8,7 @@ import Login from './auth/Login';
 import Register from './auth/Register';
 import ForgotPassword from './auth/ForgotPassword';
 import Profile from './pages/profile/Profile';
+import CreateTrip from './pages/trips/CreateTrip';
 
 export default function App() {
   return (
@@ -20,6 +21,8 @@ export default function App() {
         <Route path="/dashboard" element={<Dashboard />} />
         <Route path="/discover" element={<Placeholder title="Discover" description="Find travellers who match your destination, dates, budget and interests." />} />
         <Route path="/trips" element={<Placeholder title="My Trips" description="Your upcoming, active and completed adventures will appear here." />} />
+        <Route path="/trips/create" element={<CreateTrip />} />
+        <Route path="/create-trip" element={<CreateTrip />} />
         <Route path="/matches" element={<Placeholder title="Matches" description="Your highest compatibility traveller recommendations." />} />
         <Route path="/requests" element={<Placeholder title="Requests" description="Manage incoming and outgoing travel companion requests." />} />
         <Route path="/messages" element={<Placeholder title="Messages" description="Real-time conversations with your travel companions." />} />
