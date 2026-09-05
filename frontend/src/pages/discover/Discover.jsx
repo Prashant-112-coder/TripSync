@@ -1,6 +1,6 @@
 import { useMemo, useState } from 'react';
 import { ArrowRight, CalendarDays, Check, Heart, MapPin, Sparkles, Users, Wallet } from 'lucide-react';
-import { useSearchParams } from 'react-router-dom';
+import { Link, useSearchParams } from 'react-router-dom';
 import { findMatches } from '../../services/matchingService';
 import './discover.css';
 
@@ -10,34 +10,19 @@ const demoCandidates = [
   { id: 'demo-4', name: 'Rohan', destination: 'Goa, India', startDate: '2026-10-17', endDate: '2026-10-22', travellersNeeded: 2, budget: '₹4,000 – ₹7,000 / day', travelStyle: 'Balanced', interests: ['Beaches', 'Food', 'Photography'], activities: ['Sightseeing', 'Water Sports'], status: 'upcoming', bio: 'Beach, food and relaxed exploration.' },
   { id: 'demo-5', name: 'Ananya', destination: 'Manali, India', startDate: '2026-11-02', endDate: '2026-11-07', travellersNeeded: 2, budget: '₹8,000 – ₹12,000 / day', travelStyle: 'Comfort', interests: ['Nature', 'Photography'], activities: ['Sightseeing'], status: 'upcoming', bio: 'Planning a comfortable mountain escape with great views.' }
 ];
-
 const formatDate = (value) => value ? new Date(`${value}T00:00:00`).toLocaleDateString('en-IN', { day: 'numeric', month: 'short' }) : 'Date not set';
 const statusLabel = (score) => score >= 80 ? 'Excellent match' : score >= 60 ? 'Good match' : 'Possible match';
 
 export default function Discover() {
-  const [searchParams] = useSearchParams();
-  const [sent, setSent] = useState([]);
+  const [searchParams] = useSearchParams(); const [sent, setSent] = useState([]);
   const savedTrips = JSON.parse(localStorage.getItem('tripsync_trips') || '[]');
   const trips = savedTrips.length ? savedTrips : [{ id: 'demo-1', destination: 'Manali, India', startDate: '2026-10-15', endDate: '2026-10-20', travellersNeeded: 4, budget: '₹5,000 – ₹10,000 / day', travelStyle: 'Adventure', interests: ['Nature', 'Photography'], activities: ['Trekking', 'Sightseeing'], status: 'upcoming' }];
-  const requestedTrip = trips.find((trip) => trip.id === searchParams.get('trip')) || trips[0];
-  const [selectedId, setSelectedId] = useState(requestedTrip?.id || '');
-  const activeTrip = trips.find((trip) => trip.id === selectedId) || requestedTrip;
-  const candidates = useMemo(() => {
-    const storedCandidates = trips.filter((trip) => trip.id !== activeTrip?.id);
-    return findMatches(activeTrip, [...storedCandidates, ...demoCandidates]);
-  }, [activeTrip, trips]);
-
-  return <div className="discover-page">
-    <div className="discover-heading"><div><span className="page-eyebrow">SMART DISCOVERY</span><h1>Find Your Travel Companions</h1><p>TripSync compares your trip with other travellers and ranks the strongest compatibility matches.</p></div><div className="discover-ai"><Sparkles size={18}/><span>Explainable matching</span></div></div>
+  const requestedTrip = trips.find((trip) => trip.id === searchParams.get('trip')) || trips[0]; const [selectedId, setSelectedId] = useState(requestedTrip?.id || ''); const activeTrip = trips.find((trip) => trip.id === selectedId) || requestedTrip;
+  const candidates = useMemo(() => findMatches(activeTrip, [...trips.filter((trip) => trip.id !== activeTrip?.id), ...demoCandidates]), [activeTrip, trips]);
+  const connect = (candidate) => { const requests = JSON.parse(localStorage.getItem('tripsync_requests') || '[]'); if (!requests.some((r) => r.tripId === activeTrip.id && r.candidateId === candidate.id)) { requests.push({ id: `request-${Date.now()}`, tripId: activeTrip.id, candidateId: candidate.id, candidateName: candidate.name, destination: candidate.destination, status: 'pending', createdAt: new Date().toISOString() }); localStorage.setItem('tripsync_requests', JSON.stringify(requests)); } setSent((current) => current.includes(candidate.id) ? current : [...current, candidate.id]); };
+  return <div className="discover-page"><div className="discover-heading"><div><span className="page-eyebrow">SMART DISCOVERY</span><h1>Find Your Travel Companions</h1><p>TripSync compares your trip with other travellers and ranks the strongest compatibility matches.</p></div><div className="discover-ai"><Sparkles size={18}/><span>Explainable matching</span></div></div>
     <section className="match-trip-bar"><div><span>Matching trip</span><strong>{activeTrip?.destination}</strong></div><select value={activeTrip?.id || ''} onChange={(event) => setSelectedId(event.target.value)}>{trips.map((trip) => <option key={trip.id} value={trip.id}>{trip.destination} · {formatDate(trip.startDate)}</option>)}</select><div className="trip-mini-stats"><span><CalendarDays size={15}/> {formatDate(activeTrip?.startDate)} – {formatDate(activeTrip?.endDate)}</span><span><Wallet size={15}/> {activeTrip?.budget}</span></div></section>
     <div className="discover-summary"><div><strong>{candidates.length}</strong><span>compatible travellers</span></div><div><strong>{candidates[0]?.match.score || 0}%</strong><span>top compatibility</span></div><div><strong>{activeTrip?.interests?.length || 0}</strong><span>interest signals</span></div></div>
-    {candidates.length === 0 ? <section className="discover-empty"><Users size={34}/><h2>No strong matches yet</h2><p>Try adjusting your destination or dates. TripSync needs destination and date overlap for the first matching stage.</p></section> : <div className="match-grid">{candidates.map((candidate) => <article className="match-card" key={`${activeTrip.id}-${candidate.id}`}>
-      <div className="match-card-top"><div className="avatar">{candidate.name?.slice(0, 1) || 'T'}</div><div><h2>{candidate.name}</h2><p><MapPin size={14}/> {candidate.destination}</p></div><div className="match-score"><strong>{candidate.match.score}%</strong><span>{statusLabel(candidate.match.score)}</span></div></div>
-      <p className="match-bio">{candidate.bio}</p>
-      <div className="match-meta"><span><CalendarDays size={15}/> {formatDate(candidate.startDate)} – {formatDate(candidate.endDate)}</span><span><Wallet size={15}/> {candidate.budget}</span><span>{candidate.travelStyle}</span></div>
-      <div className="match-reasons"><strong><Sparkles size={15}/> Why this match?</strong>{candidate.match.reasons.slice(0, 4).map((reason) => <span key={reason}><Check size={13}/>{reason}</span>)}</div>
-      <div className="match-tags">{[...(candidate.match.sharedInterests || []), ...(candidate.match.sharedActivities || [])].slice(0, 5).map((tag) => <span key={tag}>{tag}</span>)}</div>
-      <button type="button" className={`primary-btn match-connect ${sent.includes(candidate.id) ? 'sent' : ''}`} onClick={() => setSent((current) => current.includes(candidate.id) ? current : [...current, candidate.id])}>{sent.includes(candidate.id) ? <><Check size={17}/> Request Sent</> : <><Heart size={17}/> Connect <ArrowRight size={16}/></>}</button>
-    </article>)}</div>}
+    {candidates.length === 0 ? <section className="discover-empty"><Users size={34}/><h2>No strong matches yet</h2><p>Try adjusting your destination or dates. TripSync needs destination and date overlap for the first matching stage.</p></section> : <div className="match-grid">{candidates.map((candidate) => <article className="match-card" key={`${activeTrip.id}-${candidate.id}`}><div className="match-card-top"><div className="avatar">{candidate.name?.slice(0, 1) || 'T'}</div><div><h2>{candidate.name}</h2><p><MapPin size={14}/> {candidate.destination}</p></div><div className="match-score"><strong>{candidate.match.score}%</strong><span>{statusLabel(candidate.match.score)}</span></div></div><p className="match-bio">{candidate.bio}</p><div className="match-meta"><span><CalendarDays size={15}/> {formatDate(candidate.startDate)} – {formatDate(candidate.endDate)}</span><span><Wallet size={15}/> {candidate.budget}</span><span>{candidate.travelStyle}</span></div><div className="match-reasons"><strong><Sparkles size={15}/> Why this match?</strong>{candidate.match.reasons.slice(0, 4).map((reason) => <span key={reason}><Check size={13}/>{reason}</span>)}</div><div className="match-tags">{[...(candidate.match.sharedInterests || []), ...(candidate.match.sharedActivities || [])].slice(0, 5).map((tag) => <span key={tag}>{tag}</span>)}</div><div className="match-card-actions"><Link to={`/matches/${candidate.id}`} state={{ trip: activeTrip, candidate }} className="secondary-btn">View Match</Link><button type="button" className={`primary-btn match-connect ${sent.includes(candidate.id) ? 'sent' : ''}`} onClick={() => connect(candidate)}>{sent.includes(candidate.id) ? <><Check size={17}/> Request Sent</> : <><Heart size={17}/> Connect <ArrowRight size={16}/></>}</button></div></article>)}</div>}
   </div>;
 }
