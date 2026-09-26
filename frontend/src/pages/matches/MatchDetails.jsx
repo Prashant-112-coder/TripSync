@@ -2,6 +2,7 @@ import { CalendarDays, Check, Heart, MapPin, Sparkles, Users, Wallet } from 'luc
 import { Link, useLocation, useNavigate, useParams } from 'react-router-dom';
 import { scoreTripMatch } from '../../services/matchingService';
 import './match-details.css';
+import { STORAGE_KEYS } from '../../config/appConfig';
 
 const demoTrip = { id: 'demo-1', destination: 'Manali, India', startDate: '2026-10-15', endDate: '2026-10-20', budget: '₹5,000 – ₹10,000 / day', travelStyle: 'Adventure', interests: ['Nature', 'Photography'], activities: ['Trekking', 'Sightseeing'], travellersNeeded: 4, status: 'upcoming' };
 const demoCandidates = [
@@ -16,7 +17,7 @@ export default function MatchDetails() {
   const { id } = useParams();
   const { state } = useLocation();
   const navigate = useNavigate();
-  const savedTrips = JSON.parse(localStorage.getItem('tripsync_trips') || '[]');
+  const savedTrips = JSON.parse(localStorage.getItem(STORAGE_KEYS.trips) || '[]');
   const trips = savedTrips.length ? savedTrips : [demoTrip];
   const trip = state?.trip || trips.find((item) => item.id === new URLSearchParams(window.location.search).get('trip')) || trips[0] || demoTrip;
   const storedCandidates = trips.filter((item) => item.id !== trip.id && item.status !== 'completed');
@@ -26,12 +27,12 @@ export default function MatchDetails() {
   if (!candidate) return <div className="match-details-page"><Link to="/discover" className="back-link">Back to Discover</Link><section className="detail-panel"><h2>Match not found</h2><p>This match may no longer be available.</p></section></div>;
 
   const match = scoreTripMatch(trip, candidate);
-  const requests = JSON.parse(localStorage.getItem('tripsync_requests') || '[]');
+  const requests = JSON.parse(localStorage.getItem(STORAGE_KEYS.requests) || '[]');
   const request = requests.find((item) => item.tripId === trip.id && item.candidateId === candidate.id);
   const sendRequest = () => {
-    const current = JSON.parse(localStorage.getItem('tripsync_requests') || '[]');
+    const current = JSON.parse(localStorage.getItem(STORAGE_KEYS.requests) || '[]');
     if (!current.some((item) => item.tripId === trip.id && item.candidateId === candidate.id)) current.push({ id: `request-${Date.now()}`, tripId: trip.id, candidateId: candidate.id, candidateName: candidate.name, destination: candidate.destination, status: 'pending', createdAt: new Date().toISOString() });
-    localStorage.setItem('tripsync_requests', JSON.stringify(current));
+    localStorage.setItem(STORAGE_KEYS.requests, JSON.stringify(current));
     navigate('/requests');
   };
   const labels = [['Destination', match.breakdown.destination], ['Dates', match.breakdown.dates], ['Budget', match.breakdown.budget], ['Travel style', match.breakdown.style], ['Interests', match.breakdown.interests], ['Activities', match.breakdown.activities]];
