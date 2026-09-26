@@ -1,6 +1,7 @@
 import { Outlet, NavLink, useLocation } from 'react-router-dom';
 import { Bell, Bot, CalendarDays, Compass, DollarSign, Heart, Home, LogOut, Menu, MessageCircle, Plane, Search, Settings, Shield, Sparkles, UserRound, UsersRound, UserRoundPlus, X } from 'lucide-react';
 import { useState } from 'react';
+import { APP_CONFIG } from '../config/appConfig';
 
 const nav = [
   ['Dashboard','/dashboard',Home], ['Discover','/discover',Compass], ['My Trips','/trips',Plane],
@@ -14,7 +15,7 @@ export default function AppShell() {
   const location = useLocation();
   return <div className="app-shell">
     <aside className={`sidebar ${open ? 'sidebar-open' : ''}`}>
-      <div className="brand"><span className="brand-mark"><Plane size={23} fill="currentColor" /></span><span>Trip<span>Sync</span></span></div>
+      <div className="brand"><span className="brand-mark"><Plane size={23} fill="currentColor" /></span><span>{APP_CONFIG.name.slice(0, -4)}<span>{APP_CONFIG.name.slice(-4)}</span></span></div>
       <nav className="side-nav">
         {nav.map(([label,path,Icon,badge]) => <NavLink key={path} to={path} onClick={()=>setOpen(false)} className={({isActive})=>`nav-item ${isActive?'active':''}`}>
           <Icon size={19}/><span>{label}</span>{badge && <b className={badge==='NEW'?'new-badge':'count-badge'}>{badge}</b>}
@@ -34,7 +35,7 @@ export default function AppShell() {
           <button className="icon-btn notification-btn"><Bell size={21}/><span>3</span></button>
           <NavLink className="icon-btn" to="/messages"><MessageCircle size={21}/></NavLink>
           <div className="divider"/>
-          <div className="user-menu"><img src="https://i.pravatar.cc/80?img=12" alt="Prashant"/><span>Hi, Prashant</span><span className="chevron">⌄</span></div>
+          <div className="user-menu"><img src="https://i.pravatar.cc/80?img=12" alt={APP_CONFIG.defaultUserName}/><span>Hi, {APP_CONFIG.defaultUserName}</span><span className="chevron">⌄</span></div>
         </div>
       </header>
       <div className="page-content"> <Outlet /> </div>
