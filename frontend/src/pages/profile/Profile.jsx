@@ -1,6 +1,7 @@
 import { useMemo, useState } from 'react';
 import { Camera, Check, MapPin, Save, UserRound } from 'lucide-react';
 import './profile.css';
+import { APP_CONFIG } from '../../config/appConfig';
 
 const travelStyles = ['Budget', 'Balanced', 'Comfort', 'Luxury'];
 const interests = ['Adventure', 'Beaches', 'Culture', 'Food', 'Hiking', 'Photography', 'Nightlife', 'Nature', 'Road trips', 'Shopping'];
@@ -8,7 +9,7 @@ const activities = ['Trekking', 'Sightseeing', 'Camping', 'Museums', 'Local food
 
 export default function Profile() {
   const [profile, setProfile] = useState({
-    name: 'Prashant',
+    name: APP_CONFIG.defaultUserName,
     age: '22',
     location: 'Bengaluru, India',
     bio: 'Curious traveller who enjoys discovering new places, local food and memorable experiences.',
@@ -40,7 +41,7 @@ export default function Profile() {
         <div>
           <span className="page-eyebrow">YOUR TRAVELLER IDENTITY</span>
           <h1>Profile & preferences</h1>
-          <p>Tell TripSync what makes a great travel companion for you.</p>
+          <p>Tell {APP_CONFIG.name} what makes a great travel companion for you.</p>
         </div>
         <button className="primary-btn" onClick={saveProfile} form="profile-form">
           {saved ? <Check size={17} /> : <Save size={17} />}
