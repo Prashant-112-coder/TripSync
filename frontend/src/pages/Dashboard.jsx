@@ -1,5 +1,6 @@
 import { ArrowUpRight, CalendarDays, Heart, MessageCircle, Sparkles, Users, WalletCards } from 'lucide-react';
 import { Link } from 'react-router-dom';
+import { APP_CONFIG } from '../config/appConfig';
 
 const matches = [
   { name:'Rahul Verma', city:'Bangalore', tags:'Adventure, Trekking, Photography', score:91, img:'https://i.pravatar.cc/100?img=11' },
@@ -10,7 +11,7 @@ const matches = [
 function MatchCard({m}) { return <div className="match-card"><img src={m.img} className="match-avatar"/><div className="match-info"><strong>{m.name}</strong><span>{m.city}</span><small>{m.tags}</small></div><div className="score"><div className="score-ring"><b>{m.score}%</b></div><small>Match</small></div><Heart className="heart" size={18} fill={m.score===91?'currentColor':'none'}/></div>; }
 
 export default function Dashboard() {
-  return <div className="dashboard"><div className="welcome"><div><h1>Good morning, Prashant! <span>👋</span></h1><p>Ready for your next adventure?</p></div><div className="welcome-actions"><Link to="/create-trip" className="primary-btn create-dashboard-btn">+ Create Trip</Link><button className="ghost-btn"><CalendarDays size={17}/> Oct 2024</button></div></div>
+  return <div className="dashboard"><div className="welcome"><div><h1>Good morning, {APP_CONFIG.defaultUserName}! <span>👋</span></h1><p>Ready for your next adventure?</p></div><div className="welcome-actions"><Link to="/create-trip" className="primary-btn create-dashboard-btn">+ Create Trip</Link><button className="ghost-btn"><CalendarDays size={17}/> Oct 2024</button></div></div>
     <div className="dashboard-grid">
       <section className="main-column">
         <div className="trip-hero"><div className="trip-copy"><span>Upcoming Trip</span><h2>Manali Adventure</h2><p>Oct 15 – Oct 20, 2024</p><div className="trip-meta"><Users size={17}/> 4 Travellers</div><button className="primary-btn">View Trip Details <ArrowUpRight size={16}/></button></div><div className="trip-photo"></div><div className="dots"><i></i><i></i><i></i></div></div>
