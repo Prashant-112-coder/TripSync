@@ -2,6 +2,7 @@ import { useMemo, useState } from 'react';
 import { ArrowRight, CalendarDays, Check, MapPin, Users, Wallet } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 import './trips.css';
+import { APP_CONFIG, STORAGE_KEYS } from '../../config/appConfig';
 
 const travelStyles = ['Budget', 'Balanced', 'Comfort', 'Luxury'];
 const interests = ['Adventure', 'Beaches', 'Culture', 'Food', 'Hiking', 'Photography', 'Nightlife', 'Nature', 'Road trips', 'Shopping'];
@@ -20,13 +21,13 @@ export default function CreateTrip() {
   const handleSubmit = (event) => {
     event.preventDefault();
     const newTrip = { ...trip, id: `trip-${Date.now()}`, travellersNeeded: Number(trip.travellersNeeded), interests: selectedInterests, activities: selectedActivities, status: 'upcoming', createdAt: new Date().toISOString() };
-    const existing = JSON.parse(localStorage.getItem('tripsync_trips') || '[]');
-    localStorage.setItem('tripsync_trips', JSON.stringify([newTrip, ...existing]));
+    const existing = JSON.parse(localStorage.getItem(STORAGE_KEYS.trips) || '[]');
+    localStorage.setItem(STORAGE_KEYS.trips, JSON.stringify([newTrip, ...existing]));
     setCreated(true);
     setTimeout(() => navigate('/trips'), 600);
   };
   return <div className="trip-page">
-    <div className="trip-heading"><div><span className="page-eyebrow">PLAN YOUR NEXT ADVENTURE</span><h1>Create a trip</h1><p>Tell TripSync about your plans so we can find compatible travellers.</p></div></div>
+    <div className="trip-heading"><div><span className="page-eyebrow">PLAN YOUR NEXT ADVENTURE</span><h1>Create a trip</h1><p>Tell {APP_CONFIG.name} about your plans so we can find compatible travellers.</p></div></div>
     {created && <div className="trip-success"><Check size={18} /> Trip created! Taking you to My Trips...</div>}
     <form className="trip-layout" onSubmit={handleSubmit}>
       <main className="trip-main">
