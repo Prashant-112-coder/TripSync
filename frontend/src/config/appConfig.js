@@ -1,5 +1,7 @@
 export const APP_CONFIG = {
   name: 'TripSync',
+  brandPrimary: 'Trip',
+  brandAccent: 'Sync',
   tagline: 'Intelligent travel companion matching & collaborative planning.',
   defaultUserName: 'Prashant',
 };
