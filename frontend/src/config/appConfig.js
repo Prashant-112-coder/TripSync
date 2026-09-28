@@ -1,14 +1,14 @@
 export const APP_CONFIG = {
-  name: 'TripSync',
-  brandPrimary: 'Trip',
-  brandAccent: 'Sync',
-  tagline: 'Intelligent travel companion matching & collaborative planning.',
+  name: 'Travel Mate',
+  brandPrimary: 'Travel',
+  brandAccent: 'Mate',
+  tagline: 'Travel Mate – A Smart Traveller Matching Platform for Solo Travellers',
   defaultUserName: 'Prashant',
 };
 
 export const STORAGE_KEYS = {
-  trips: 'tripsync_trips',
-  requests: 'tripsync_requests',
+  trips: 'travelmate_trips',
+  requests: 'travelmate_requests',
 };
 
 export const ROUTES = {

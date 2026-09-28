@@ -24,7 +24,7 @@ export default function Profile() {
   const [selectedActivities, setSelectedActivities] = useState(['Trekking', 'Sightseeing', 'Local food']);
   const [saved, setSaved] = useState(false);
 
-  const initials = useMemo(() => profile.name.trim().slice(0, 2).toUpperCase() || 'TS', [profile.name]);
+  const initials = useMemo(() => profile.name.trim().slice(0, 2).toUpperCase() || 'TM', [profile.name]);
 
   const update = (field, value) => setProfile((current) => ({ ...current, [field]: value }));
   const toggle = (value, setter) => setter((items) => items.includes(value) ? items.filter((item) => item !== value) : [...items, value]);
@@ -77,7 +77,7 @@ export default function Profile() {
           </section>
 
           <section className="profile-card">
-            <div className="card-heading"><div><h2>Travel preferences</h2><p>These preferences help TripSync calculate better matches.</p></div></div>
+            <div className="card-heading"><div><h2>Travel preferences</h2><p>These preferences help Travel Mate calculate better matches.</p></div></div>
             <div className="form-grid">
               <label>Travel style<div className="choice-row">{travelStyles.map((item) => <button type="button" key={item} className={profile.style === item ? 'choice active' : 'choice'} onClick={() => update('style', item)}>{item}</button>)}</div></label>
               <label>Daily budget<select value={profile.budget} onChange={(e) => update('budget', e.target.value)}><option>Under ₹2,000 / day</option><option>₹2,000 – ₹5,000 / day</option><option>₹5,000 – ₹10,000 / day</option><option>₹10,000+ / day</option></select></label>

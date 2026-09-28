@@ -1,8 +1,8 @@
-# TripSync ✈️
+# Travel Mate ✈️
 
-**TripSync – An Intelligent Traveller Matching and Collaborative Trip Planning Platform**
+**Travel Mate – A Smart Traveller Matching Platform for Solo Travellers**
 
-TripSync is an MCA major project focused on helping travellers discover compatible companions, create trips, collaborate in groups, plan itineraries and manage shared expenses.
+Travel Mate is an MCA major project focused on helping travellers discover compatible companions, create trips, collaborate in groups, plan itineraries and manage shared expenses.
 
 ## Stack
 
